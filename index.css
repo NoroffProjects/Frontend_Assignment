@@ -1,0 +1,29 @@
+/* Center content classes for screens wider that 500 pixels. */
+.content {
+    max-width: 500px;
+    margin: auto;
+}
+
+.balance-content {
+    align-items: center;
+}
+
+#balance-content, button{
+    background-color: rgb(0, 255, 145);
+    text-align: center;
+}
+
+.work-content {
+    text-align: center;
+}
+
+#bank-button{
+    background-color: yellow;
+    text-align: center;
+}
+
+#work-button{
+    background-color: rgb(0, 81, 255);
+    color: white;
+    text-align: center;
+}
