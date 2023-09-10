@@ -8,104 +8,52 @@
     <title>Tech Shop</title>
 </head>
 <body>
-    <div class="content">
-        <header> Tech Shop</header>
-        <table>
-            <tr>
-                <th>
-                    <div class="balance-content">
-                        <h2>Joe Banker</h2> <!-- Fix the closing h2 tag -->
-                        <div>
-                            <table>
-                                <!-- Balance Row -->
-                                <tr>
-                                    <th>
-                                        <p>Balance</p>
-                                    </th>
-                                    <th>
-                                        <p id="balance-amount">200 kr.</p>
-                                    </th>
-                                </tr>
-                                <!-- Loan Row -->
-                                <tr>
-                                    <th>
-                                        <p>Loan</p>
-                                    </th>
-                                    <th>
-                                        <p id="loan-amount">0 kr.</p>
-                                    </th>
-                                </tr>
-                            </table>
-                        </div>
-                        <button class="loan-button" onclick="getALoan()">
-                            Get a loan
-                        </button>
-                        <button id="repay-loan-button" onclick="repayLoan()" style="visibility: hidden;">
-                            Repay loan
-                        </button>
-                    </div>
-                </th>
-                <th>
-                    <div class="work-content">
-                        <h2> Work </h2>
-                        <div>
-                            <table>
-                                <!-- Pay Row -->
-                                <tr>
-                                    <th>
-                                        <p>Pay</p>
-                                    </th>
-                                    <th>
-                                        <p id="pay-amount">0 kr.</p>
-                                    </th>
-                                </tr>
-                            </table>
-                            <div class="work-content-buttons">
-                                <button id="bank-button" onclick="transferSalaryToBankAccount()">
-                                    Bank
-                                </button>
-                                <button id="work-button" onclick="work()">
-                                    Work
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="laptop-content">
-                        <select id="laptop-select" onchange="onLaptopChange()">
-                            
-                        </select>
-                        <!-- Laptop Information -->
-                        <div>
-                            <table>
-                                <tr>
-                                    <th>
-                                        <img id="laptop-image"/>
-                                    </th>
-                                    <th>
-                                        <div>
-                                            <h2 id="laptop-title">
-
-                                            </h2>
-                                            <p id="laptop-description">
-
-                                            </p>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <div>
-                                            <h2 id="laptop-price"></h2>
-                                            <button id="buy-button" onclick="buyLaptop()">
-                                                Buy Now
-                                            </button>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </th>
-            </tr>
-        </table>
+    <div class="top-bar">
+        <a class="active">Tech Shop</a>
+    </div>
+    <div class="container">
+        <!-- Balance Information -->
+        <div class="balance-container">
+            <h2>Joe Banker</h2>
+            <p>Balance</p>
+            <p id="balance-amount">200 kr.</p>
+            <p>Loan</p>
+            <p id="loan-amount">0 kr.</p>
+            <button class="loan-button" onclick="getALoan()">Get A Loan</button>
+            <button id="repay-loan-button" onclick="repayLoan()" style="visibility: hidden;">Repay Loan</button>
+        </div>
+        <!-- Work Information-->
+        <div class="work-container">
+            <h2> Work </h2>
+            <p>Pay</p>
+            <p id="pay-amount">0 kr.</p>
+            <button id="bank-button" onclick="transferSalaryToBankAccount()">
+                Bank
+            </button>
+            <button id="work-button" onclick="work()">
+                Work
+            </button>
+        </div>
+         <!-- Laptop Selection -->
+        <div class="laptop-select-container">
+            <h2>Laptops</h2>
+            <select id="laptop-select" onchange="onLaptopChange()"></select>
+            <p id="laptop-features"></p>
+        </div>
+         <!-- Laptop Information -->
+        <div class="laptop-information-container">
+            <img id="laptop-image"/>
+            <div class="laptop-details">
+                <h2 id="laptop-title"></h2>
+                <p id="laptop-description"></p>
+            </div>
+            <div class="laptop-purchase">
+                <h2 id="laptop-price"></h2>
+                <button id="buy-button" onclick="buyLaptop()">
+                    Buy Now
+                </button>
+            </div>
+        </div>
     </div>
     <script type="text/javascript">
         setLaptopSelectOptions();

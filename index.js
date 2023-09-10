@@ -136,14 +136,16 @@ async function setLaptopElements(){
     let laptopTitle = document.getElementById('laptop-title');
     let laptopDescription = document.getElementById('laptop-description');
     let laptopPrice = document.getElementById('laptop-price');
+    let laptopFeatures = document.getElementById('laptop-features');
 
     // Get the selected laptop object from laptopSelect.
     let selectedLaptop = await getSelectedLaptop();
 
     // Set Laptop Elements
     laptopImage.src = `https://hickory-quilled-actress.glitch.me/${selectedLaptop.image}`;
-    laptopTitle = selectedLaptop.title;
+    laptopTitle.textContent = selectedLaptop.title;
     laptopDescription.textContent = selectedLaptop.description;
+    laptopFeatures.textContent = selectedLaptop.specs.join('\n');
     laptopPrice.textContent = new Intl.NumberFormat(
         'dk-DK', 
         {style: 'currency', currency: 'DKK'}
