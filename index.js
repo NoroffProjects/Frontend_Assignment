@@ -1,4 +1,14 @@
 /*This file contains all javascript functions utilized in the index.html file.*/
+
+/*  Parsing text content of paragraph tag elemtent to an integer explanation.
+    The text content always consists of a number plus danish currency. 
+    Thefore, any dots are replaced by empty string when parsing the number to an integer. 
+    Thus, anything after the comma are disregarded. 
+    This way the comma is used as a delimiter instead of a dot when the number becomes greater than or equal to 1.000.
+*/
+
+/* Methods used in index.html */
+
 function getALoan() {
     // Prompt the user to enter the size of the load they desire to take.
     let loanSize = prompt("Please enter the size of the load you wish to take.");
@@ -9,8 +19,7 @@ function getALoan() {
     const balanceAmount = document.getElementById("balance-amount");
     const loanAmount = document.getElementById("loan-amount");
 
-    // Split the text by whitespace to separate the loan number from the currency and parse it to an integer. 
-    // The Number occurs before the currency in the string therefore the number is at index 0.
+    // Parsing text content to an integer.
     const balance = parseInt(balanceAmount.textContent.replace(".", ""));
     const currentLoan = parseInt(loanAmount.textContent.replace(".", ""));
     
@@ -34,7 +43,7 @@ function getALoan() {
     else if(loanSize <= 0){
         alert(`You must enter a loan size greater than zero. Please enter a new loan size.`);
     }
-    
+
     // The user cannot get a new loan before repaying their current loan.
     // Nor can the user have multiple loans at once as their initial loan should be paid back in full first.
     if(currentLoan > 0){
@@ -56,11 +65,7 @@ function work() {
     // Get the pay-amount p tag element.
     const payAmount = document.getElementById("pay-amount");
 
-    /* Parse the text content of the payAmount p tag element to an integer.
-     * The text content of payAmount is always a number + dansih curreny.
-       Thefore, any dots are replaced by empty string. 
-       Thus, anything after the comma are disregarded.
-     */
+     // Parsing text content to an integer.
     const currentPay = parseInt(payAmount.textContent.replace(".", ""));
 
     // Set the text content of payAmount to the current pay balance incremented by 100.
@@ -72,90 +77,111 @@ function work() {
 
 // This method gets invoked when clicking the bank button and transfers the pay balance to the bank account.
 function transferSalaryToBankAccount(){
-    let balanceAmount = document.getElementById("balance-amount");
+    // Get balanceAmount, payAmount and loanAmount html elements by their id.
+    const balanceAmount = document.getElementById("balance-amount");
     const payAmount = document.getElementById("pay-amount");
-    let loanAmount = document.getElementById("loan-amount");
-    let currentLoan = parseInt(loanAmount.textContent.replace(".", ""));
+    const loanAmount = document.getElementById("loan-amount");
 
-    let balance = parseInt(balanceAmount.textContent.replace(".", ""));
-    let pay = currentPay = parseInt(payAmount.textContent.replace(".", ""));
-
-    let numberFormat = new Intl.NumberFormat(
+    // Parse text content to an integer.
+    const currentLoan = parseInt(loanAmount.textContent.replace(".", ""));
+    const balance = parseInt(balanceAmount.textContent.replace(".", ""));
+    const pay = currentPay = parseInt(payAmount.textContent.replace(".", ""));
+    
+    // Instantiate a NumberFormat object to format balance and loans by the currency passed to the constructor.
+    const numberFormat = new Intl.NumberFormat(
         'dk-DK', 
         {style: 'currency', currency: 'DKK'}
     );
-        if(currentLoan > 0){
-            loanAmount.textContent = numberFormat.format(currentLoan + pay*.1);
-            balanceAmount.textContent = numberFormat.format(balance + pay*.9);
-        }else{
-            balanceAmount.textContent = numberFormat.format(balance + pay);
-        }
+    
+    /*  If the current loan is greater than 0 
+        then 10% of the pay balance goes to pay off the loan 
+        and the rest is transfered to the bank balance.
+        Otherwise, transfer the entire pay balance to the bank balance.
+    */
+    if(currentLoan > 0){
+        // Set the text content of bank balance and loan amount to the updated value. 
+        loanAmount.textContent = numberFormat.format(currentLoan + pay*.1);
+        balanceAmount.textContent = numberFormat.format(balance + pay*.9);
+    }else{
+        balanceAmount.textContent = numberFormat.format(balance + pay);
+    }
 
+    // Set the pay balance to 0.
     payAmount.textContent = numberFormat.format(0);
 }
 
+// This method gets invoked when clicking the repay loan button and repays the loan based on the pay balance.
 function repayLoan() {
-    let balanceAmount = document.getElementById("balance-amount");
-    let loanAmount = document.getElementById("loan-amount");
+    // Get balanceAmount, loanAmount and payAmount html elements by their id.
+    const balanceAmount = document.getElementById("balance-amount");
+    const loanAmount = document.getElementById("loan-amount");
     const payAmount = document.getElementById("pay-amount");
 
-    let balance = parseInt(balanceAmount.textContent.replace(".", ""));
-    let currentLoan = parseInt(loanAmount.textContent.replace(".", ""));
-    let pay = currentPay = parseInt(payAmount.textContent.replace(".", ""));
+    // Parse text content to an integer.
+    const balance = parseInt(balanceAmount.textContent.replace(".", ""));
+    const currentLoan = parseInt(loanAmount.textContent.replace(".", ""));
+    const pay = currentPay = parseInt(payAmount.textContent.replace(".", ""));
 
-    let numberFormat = new Intl.NumberFormat(
+    // Instantiate a NumberFormat object to format balance and loans by the currency passed to the constructor.
+    const numberFormat = new Intl.NumberFormat(
         'dk-DK', 
         {style: 'currency', currency: 'DKK'}
     );
     
-    let difference = pay-currentLoan;
+    // Compute the difference between the pay balance and the loan.
+    const difference = pay-currentLoan;
     
-    // If the current loan is greater than the pay amount then loan cannot be fully repaid yet.
-    // Therefore, the current loan is set to the remaining difference between the current loan and the pay amount.
+    // If the current loan is greater than or equal to the pay amount then loan can be fully repaid.
+    // Therefore, the loan is set to 0, the bank balance is incremented by the difference between pay and the loan.
+    // The repay loan button is also hidden from the user.
     if(difference >= 0){
-
         loanAmount.textContent = numberFormat.format(0);
         balanceAmount.textContent = numberFormat.format(balance + difference);
         document.getElementById("repay-loan-button").style.visibility = 'hidden';
     }
-    // When the pay amount is greater than the current loan then the loan can be fully repaid and the repay loan button is hidden from the user.
+    /*  When the difference between the pay then loan is less than zero then the diffence becomes a negative number.
+        Since the difference refers to the part of the loan remaining to be repaid, 
+        the absolute value of the difference is computed to remove the negative sign.
+    */
     else{
         loanAmount.textContent = numberFormat.format(Math.abs(difference));
     }
 
+    // Since the pay balance has been transfered to the bank balance it is set to 0.
     payAmount.textContent = numberFormat.format(0);
 }
 
-async function getLaptops() {
-    let response = await fetch('https://hickory-quilled-actress.glitch.me/computers');
-    return await response.json();
-}
-
+// This method is invoked when the index.html page has been loaded and the method adds laptops to the laptop select element in the DOM.
 async function setLaptopSelectOptions(){
-    let laptops = await getLaptops();
+    const laptops = await getLaptops(); // Get laptops as json object, see method definition at line 209.
     if(laptops){
-        let laptopSelect = document.getElementById('laptop-select');
-        for(let laptop of laptops){
-            let option = document.createElement('option');
+        // Get the laptop select element by its id.
+        const laptopSelect = document.getElementById('laptop-select');
+        /* For each laptop object add a new option tag with the laptop title as option text.*/ 
+        for(const laptop of laptops){
+            const option = document.createElement('option');
             option.text = laptop.title;
             laptopSelect.add(option);
         }        
     } 
 }
 
+// This method is also invoked when the index.html page has been loaded. 
+// The purpose of the method is to display the information of the selected laptop to the user.
 async function setLaptopElements(){
     /* Get laptop elements by their id.*/
-    let laptopImage = document.getElementById('laptop-image');
-    let laptopTitle = document.getElementById('laptop-title');
-    let laptopDescription = document.getElementById('laptop-description');
-    let laptopPrice = document.getElementById('laptop-price');
-    let laptopFeatures = document.getElementById('laptop-features');
+    const laptopImage = document.getElementById('laptop-image');
+    const laptopTitle = document.getElementById('laptop-title');
+    const laptopDescription = document.getElementById('laptop-description');
+    const laptopPrice = document.getElementById('laptop-price');
+    const laptopFeatures = document.getElementById('laptop-features');
 
     // Get the selected laptop object from laptopSelect.
-    let selectedLaptop = await getSelectedLaptop();
+    const selectedLaptop = await getSelectedLaptop(); // See method definiton at line 218.
 
-    // Set Laptop Elements
-    laptopImage.src = `https://hickory-quilled-actress.glitch.me/${selectedLaptop.image}`;
+    // Set Laptop Elements such as image, title, description, specs and price.
+    // The source of the image is based on the same url concatenated with the image path of the selected laptop.
+    laptopImage.src = `https://hickory-quilled-actress.glitch.me/${selectedLaptop.image}`; 
     laptopTitle.textContent = selectedLaptop.title;
     laptopDescription.textContent = selectedLaptop.description;
     laptopFeatures.textContent = selectedLaptop.specs.join('\n');
@@ -165,30 +191,50 @@ async function setLaptopElements(){
     ).format(selectedLaptop.price);
 }
 
-async function onLaptopChange(){
+// This method is invoked whenever a new laptop has been selected by the user.
+async function onLaptopChanged(){
     await setLaptopElements();
 }
 
-async function getSelectedLaptop () {
-    let laptopSelect =  document.getElementById('laptop-select');
-    for(let laptop of await getLaptops()){
-        if(laptopSelect.value === laptop.title){
-            return laptop;
-        }
-    }
-}
-
+// This method is invoked when clicking the buy a laptop button.
 async function buyLaptop(){
-    let balanceAmount = document.getElementById("balance-amount");
-    let balance = parseInt(balanceAmount.textContent.replace(".", ""));
-    let selectedLaptop = await getSelectedLaptop();
+    // Get balanceAmount html element by its id and parse it to an integer.
+    const balanceAmount = document.getElementById("balance-amount");
+    const balance = parseInt(balanceAmount.textContent.replace(".", ""));
+
+    // Get the selected laptop object from laptopSelect.
+    const selectedLaptop = await getSelectedLaptop(); // See method definiton at line 218.
+
+    // If the bank balance is greater than or equal to the laptop price the purchase can be done.
     if(balance >= selectedLaptop.price){
         balanceAmount.textContent = new Intl.NumberFormat(
             'dk-DK', 
             {style: 'currency', currency: 'DKK'}
         ).format(balance-selectedLaptop.price);
-    }else{
+    }
+    // When the bank balance is below the laptop price the user receives an alaet message.
+    else{
         alert(`Your bank balance is:${balance} and the price of ${selectedLaptop.title} is: ${selectedLaptop.price}.
             \nTherefore, you cannot afford the laptop: ${selectedLaptop.title}.`);
+    }
+}
+
+/* Methods only used in index.js */
+
+// This method asynchronously fetches all laptops from the url and returns a json object from the response.
+async function getLaptops() {
+    let response = await fetch('https://hickory-quilled-actress.glitch.me/computers');
+    return await response.json();
+}
+
+/*  This method returns the laptop selected in the select element from the DOM.
+    It is done by iterating through each laptop, 
+    comparing the laptop title with the selected laptop and returning that laptop.*/
+async function getSelectedLaptop () {
+    let laptopSelect = document.getElementById('laptop-select');
+    for(let laptop of await getLaptops()){
+        if(laptopSelect.value === laptop.title){
+            return laptop;
+        }
     }
 }

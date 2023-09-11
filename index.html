@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link the index.css stylesheet file. -->
     <link rel="stylesheet" href="index.css">
+    <!-- Load index.js as javascript file. -->
     <script src="./index.js" type="text/javascript"></script>
+    <!-- Tab Title -->
     <title>Tech Shop</title>
 </head>
 <body>
+    <!-- Top Navigation Bar with Title -->
     <nav>
         <ul class="main-nav">
             <li><a>Tech Shop</a></li>
@@ -18,20 +22,27 @@
         <div class="balance-container">
             <h2>Joe Banker</h2>
             <p>Balance</p>
+            <!-- Bank balance -->
             <p id="balance-amount">200 kr.</p>
             <p>Loan</p>
+            <!-- Loan amount -->
             <p id="loan-amount">0,00 kr.</p>
+            <!-- Get A Loan Button -->
             <button class="loan-button" onclick="getALoan()">Get A Loan</button>
+            <!-- Repay Loan Button, invisible by default.-->
             <button id="repay-loan-button" onclick="repayLoan()" style="visibility: hidden;">Repay Loan</button>
         </div>
         <!-- Work Information-->
         <div class="work-container">
             <h2> Work </h2>
             <p>Pay</p>
+            <!-- Pay balance -->
             <p id="pay-amount">0,00 kr.</p>
+            <!-- Transfer Pay Balance to Bank Account Button -->
             <button id="bank-button" onclick="transferSalaryToBankAccount()">
                 Bank
             </button>
+            <!-- Work Button -->
             <button id="work-button" onclick="work()">
                 Work
             </button>
@@ -39,16 +50,19 @@
          <!-- Laptop Selection -->
         <div class="laptop-select-container">
             <h2>Laptops</h2>
-            <select id="laptop-select" onchange="onLaptopChange()"></select>
+            <select id="laptop-select" onchange="onLaptopChanged()"></select>
             <p id="laptop-features"></p>
         </div>
          <!-- Laptop Information -->
         <div class="laptop-information-container">
+            <!-- Laptop Image -->
             <img id="laptop-image"/>
+            <!-- Laptop Title & Description -->
             <div class="laptop-details">
                 <h2 id="laptop-title"></h2>
                 <p id="laptop-description"></p>
             </div>
+            <!-- Laptop Price & Buy Button-->
             <div class="laptop-purchase">
                 <h2 id="laptop-price"></h2>
                 <button id="buy-button" onclick="buyLaptop()">
@@ -57,6 +71,7 @@
             </div>
         </div>
     </div>
+    <!-- Add option tags to laptop select element and set laptop elements based on selected laptop. -->
     <script type="text/javascript">
         setLaptopSelectOptions();
         setLaptopElements();
