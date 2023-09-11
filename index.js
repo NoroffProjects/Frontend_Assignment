@@ -3,19 +3,19 @@ function getALoan() {
     // Prompt the user to enter the size of the load they desire to take.
     let loanSize = prompt("Please enter the size of the load you wish to take.");
     if(loanSize === null) loanSize = 0;
-    else loanSize = parseInt(loanSize); // Parse the loan size from string to an integer.
+    else loanSize = parseInt(loanSize.replace(".", "")); // Parse the loan size from string to an integer.
 
     // Get the balance and loan paragraph tag element from the document object model (DOM) by their unique id.
-    let balanceAmount = document.getElementById("balance-amount");
-    let loanAmount = document.getElementById("loan-amount");
+    const balanceAmount = document.getElementById("balance-amount");
+    const loanAmount = document.getElementById("loan-amount");
 
     // Split the text by whitespace to separate the loan number from the currency and parse it to an integer. 
     // The Number occurs before the currency in the string therefore the number is at index 0.
-    let balance = parseInt(balanceAmount.textContent.split(" ")[0]);
-    let currentLoan = parseInt(loanAmount.textContent.split(" ")[0]);
+    const balance = parseInt(balanceAmount.textContent.replace(".", ""));
+    const currentLoan = parseInt(loanAmount.textContent.replace(".", ""));
     
     // Instantiate a NumberFormat object to format balance and loans by the currency passed to the constructor.
-    let numberFormat = new Intl.NumberFormat(
+    const numberFormat = new Intl.NumberFormat(
         'dk-DK', 
         {style: 'currency', currency: 'DKK'}
     );
@@ -23,22 +23,24 @@ function getALoan() {
     // The user is not allowed to take a loan greater than twice their balance.
     // In this case the user must enter a new loan that follows the rule stated above.
     if(loanSize > 2 * balance){
-        let newLoan = prompt(
+        const newLoan = prompt(
             `You cannot enter a loan that is more than twice the size of your current balance: ${numberFormat.format(balance)}
              Please enter a smaller load.`);
         loanSize = parseInt(newLoan);
-    }
-    // The user cannot get a new loan before repaying their current loan.
-    // Nor can the user have multiple loans at once as their initial loan should be paid back in full first.
-    else if(currentLoan > 0){
-        alert(`You currently have a loan of size: 
-                ${numberFormat.format(currentLoan)}.
-                Therefore, you must repay your current loan before you can take a new one.`)
+        console.log(`Loan Size:${loanSize}`);
     }
     // The entered loan gets added to the balance which becomes the text of the balance amount paragraph tag 
     // in the DOM by the currency of the number format.
     else if(loanSize <= 0){
         alert(`You must enter a loan size greater than zero. Please enter a new loan size.`);
+    }
+    
+    // The user cannot get a new loan before repaying their current loan.
+    // Nor can the user have multiple loans at once as their initial loan should be paid back in full first.
+    if(currentLoan > 0){
+        alert(`You currently have a loan of size: 
+                ${numberFormat.format(currentLoan)}.
+                Therefore, you must repay your current loan before you can take a new one.`)
     }
     else{
         balanceAmount.textContent = numberFormat.format(balance + loanSize);
@@ -49,23 +51,34 @@ function getALoan() {
     }  
 }
 
+// This method gets invoked when clicking the work button and increments the pay balance by 100.
 function work() {
+    // Get the pay-amount p tag element.
     const payAmount = document.getElementById("pay-amount");
-    let currentPay = parseInt(payAmount.textContent.split(" ")[0]);
+
+    /* Parse the text content of the payAmount p tag element to an integer.
+     * The text content of payAmount is always a number + dansih curreny.
+       Thefore, any dots are replaced by empty string. 
+       Thus, anything after the comma are disregarded.
+     */
+    const currentPay = parseInt(payAmount.textContent.replace(".", ""));
+
+    // Set the text content of payAmount to the current pay balance incremented by 100.
     payAmount.textContent = new Intl.NumberFormat(
         'dk-DK', 
         {style: 'currency', currency: 'DKK'}
     ).format(currentPay + 100);
 }
 
+// This method gets invoked when clicking the bank button and transfers the pay balance to the bank account.
 function transferSalaryToBankAccount(){
     let balanceAmount = document.getElementById("balance-amount");
     const payAmount = document.getElementById("pay-amount");
     let loanAmount = document.getElementById("loan-amount");
-    let currentLoan = parseInt(loanAmount.textContent.split(" ")[0]);
+    let currentLoan = parseInt(loanAmount.textContent.replace(".", ""));
 
-    let balance = parseInt(balanceAmount.textContent.split(" ")[0]);
-    let pay = currentPay = parseInt(payAmount.textContent.split(" ")[0]);
+    let balance = parseInt(balanceAmount.textContent.replace(".", ""));
+    let pay = currentPay = parseInt(payAmount.textContent.replace(".", ""));
 
     let numberFormat = new Intl.NumberFormat(
         'dk-DK', 
@@ -86,9 +99,9 @@ function repayLoan() {
     let loanAmount = document.getElementById("loan-amount");
     const payAmount = document.getElementById("pay-amount");
 
-    let balance = parseInt(balanceAmount.textContent.split(" ")[0]);
-    let currentLoan = parseInt(loanAmount.textContent.split(" ")[0]);
-    let pay = currentPay = parseInt(payAmount.textContent.split(" ")[0]);
+    let balance = parseInt(balanceAmount.textContent.replace(".", ""));
+    let currentLoan = parseInt(loanAmount.textContent.replace(".", ""));
+    let pay = currentPay = parseInt(payAmount.textContent.replace(".", ""));
 
     let numberFormat = new Intl.NumberFormat(
         'dk-DK', 
@@ -167,7 +180,7 @@ async function getSelectedLaptop () {
 
 async function buyLaptop(){
     let balanceAmount = document.getElementById("balance-amount");
-    let balance = parseInt(balanceAmount.textContent.split(" ")[0]);
+    let balance = parseInt(balanceAmount.textContent.replace(".", ""));
     let selectedLaptop = await getSelectedLaptop();
     if(balance >= selectedLaptop.price){
         balanceAmount.textContent = new Intl.NumberFormat(

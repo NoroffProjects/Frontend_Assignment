@@ -8,9 +8,11 @@
     <title>Tech Shop</title>
 </head>
 <body>
-    <div class="top-bar">
-        <a class="active">Tech Shop</a>
-    </div>
+    <nav>
+        <ul class="main-nav">
+            <li><a>Tech Shop</a></li>
+        </ul>
+    </nav>
     <div class="container">
         <!-- Balance Information -->
         <div class="balance-container">
@@ -18,7 +20,7 @@
             <p>Balance</p>
             <p id="balance-amount">200 kr.</p>
             <p>Loan</p>
-            <p id="loan-amount">0 kr.</p>
+            <p id="loan-amount">0,00 kr.</p>
             <button class="loan-button" onclick="getALoan()">Get A Loan</button>
             <button id="repay-loan-button" onclick="repayLoan()" style="visibility: hidden;">Repay Loan</button>
         </div>
@@ -26,7 +28,7 @@
         <div class="work-container">
             <h2> Work </h2>
             <p>Pay</p>
-            <p id="pay-amount">0 kr.</p>
+            <p id="pay-amount">0,00 kr.</p>
             <button id="bank-button" onclick="transferSalaryToBankAccount()">
                 Bank
             </button>
