@@ -6,11 +6,15 @@
     <!-- Link the index.css stylesheet file. -->
     <link rel="stylesheet" href="index.css">
     <!-- Load index.js as javascript file. -->
-    <script src="./index.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./index.js"></script>
     <!-- Tab Title -->
     <title>Tech Shop</title>
 </head>
 <body>
+    <script type="module" src="./bank.js">
+        import {hello} from "./bank.js";
+        hello();
+    </script>
     <!-- Top Navigation Bar with Title -->
     <nav>
         <ul class="main-nav">
@@ -72,7 +76,7 @@
         </div>
     </div>
     <!-- Add option tags to laptop select element and set laptop elements based on selected laptop. -->
-    <script type="text/javascript">
+    <script>
         setLaptopSelectOptions();
         setLaptopElements();
     </script>

@@ -39,8 +39,8 @@ function getALoan() {
         if(newLoan === null) return;
         loanSize = parseInt(newLoan.replace(".", ""));
     }
-    // The entered loan gets added to the balance which becomes the text of the balance amount paragraph tag 
-    // in the DOM by the currency of the number format.
+    // The user is not allowed to enter a negative number as a loan.
+    // Therefore, the user is continuely prompted to enter a number greater than 0.
     while(loanSize <= 0){
         const newLoan = prompt(`You must enter a loan size greater than zero. Please enter a new loan size.`);
         // If the user cancels the prompt the function returns.
@@ -103,9 +103,22 @@ function transferSalaryToBankAccount(){
         Otherwise, transfer the entire pay balance to the bank balance.
     */
     if(currentLoan > 0){
-        // Set the text content of bank balance and loan amount to the updated value. 
-        loanAmount.textContent = numberFormat.format(currentLoan - pay*.1);
-        balanceAmount.textContent = numberFormat.format(balance + pay*.9);
+        // Compute the remainder after subtracting 10% of pay balance from loan.
+        const remainder = currentLoan - pay*.1;
+
+        /*  If the remainder is greater than 0 that means the loan cannot be fully repaid by the 10% of the pay balance.
+            Therefore, the loan is set to the remainder and the bank balance is incremented by 90% of the pay balance.
+            When the remainder is less than zero or equal zero then the loan can be fully repaid by the 10% of the pay balance 
+            and the absolute value of the remainder can therefore be added to the bank balance. 
+            This way the remainder after fully repaying the loan is not lost but added to the bank balance instead.
+        */
+        if(remainder > 0){
+            loanAmount.textContent = numberFormat.format(remainder);
+            balanceAmount.textContent = numberFormat.format(balance + pay*.9);
+        }else{
+            loanAmount.textContent = numberFormat.format(0);
+            balanceAmount.textContent = numberFormat.format(balance + pay*.9 + Math.abs(remainder));
+        }
     }else{
         balanceAmount.textContent = numberFormat.format(balance + pay);
     }
@@ -132,15 +145,12 @@ function repayLoan() {
         {style: 'currency', currency: 'DKK'}
     );
     
-    // Compute the difference between the pay balance and the loan.
-    const difference = pay-currentLoan;
-    
-    // If the current loan is greater than or equal to the pay amount then loan can be fully repaid.
-    // Therefore, the loan is set to 0, the bank balance is incremented by the difference between pay and the loan.
-    // The repay loan button is also hidden from the user.
-    if(difference >= 0){
+    /*  If the pay balance is greater than the current loan then the loan can be fully repaid.  
+     * 
+    */
+    if(pay > currentLoan){
         loanAmount.textContent = numberFormat.format(0);
-        balanceAmount.textContent = numberFormat.format(balance + difference);
+        payAmount.textContent = numberFormat.format(pay-currentLoan);
         document.getElementById("repay-loan-button").style.visibility = 'hidden';
     }
     /*  When the difference between the pay then loan is less than zero then the diffence becomes a negative number.
@@ -148,11 +158,10 @@ function repayLoan() {
         the absolute value of the difference is computed to remove the negative sign.
     */
     else{
-        loanAmount.textContent = numberFormat.format(Math.abs(difference));
+        loanAmount.textContent = numberFormat.format(currentLoan-pay);
+        payAmount.textContent = numberFormat.format(Math.abs(pay-currentLoan));
     }
-
-    // Since the pay balance has been transfered to the bank balance it is set to 0.
-    payAmount.textContent = numberFormat.format(0);
+    
 }
 
 // This method is invoked when the index.html page has been loaded and the method adds laptops to the laptop select element in the DOM.
