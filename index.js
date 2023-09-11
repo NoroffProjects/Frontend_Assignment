@@ -14,7 +14,7 @@ function getALoan() {
     let loanSize = prompt("Please enter the size of the load you wish to take.");
     if(loanSize === null) loanSize = 0;
     else loanSize = parseInt(loanSize.replace(".", "")); // Parse the loan size from string to an integer.
-
+    console.log(`Loan:${loanSize}`);
     // Get the balance and loan paragraph tag element from the document object model (DOM) by their unique id.
     const balanceAmount = document.getElementById("balance-amount");
     const loanAmount = document.getElementById("loan-amount");
@@ -31,17 +31,21 @@ function getALoan() {
     
     // The user is not allowed to take a loan greater than twice their balance.
     // In this case the user must enter a new loan that follows the rule stated above.
-    if(loanSize > 2 * balance){
+    while(loanSize > 2 * balance){
         const newLoan = prompt(
             `You cannot enter a loan that is more than twice the size of your current balance: ${numberFormat.format(balance)}
              Please enter a smaller load.`);
-        loanSize = parseInt(newLoan);
-        console.log(`Loan Size:${loanSize}`);
+        // If the user cancels the prompt the function returns.
+        if(newLoan === null) return;
+        loanSize = parseInt(newLoan.replace(".", ""));
     }
     // The entered loan gets added to the balance which becomes the text of the balance amount paragraph tag 
     // in the DOM by the currency of the number format.
-    else if(loanSize <= 0){
-        alert(`You must enter a loan size greater than zero. Please enter a new loan size.`);
+    while(loanSize <= 0){
+        const newLoan = prompt(`You must enter a loan size greater than zero. Please enter a new loan size.`);
+        // If the user cancels the prompt the function returns.
+        if(newLoan === null) return;
+        loanSize = parseInt(newLoan.replace(".", ""));
     }
 
     // The user cannot get a new loan before repaying their current loan.
