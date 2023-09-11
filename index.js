@@ -100,7 +100,7 @@ function transferSalaryToBankAccount(){
     */
     if(currentLoan > 0){
         // Set the text content of bank balance and loan amount to the updated value. 
-        loanAmount.textContent = numberFormat.format(currentLoan + pay*.1);
+        loanAmount.textContent = numberFormat.format(currentLoan - pay*.1);
         balanceAmount.textContent = numberFormat.format(balance + pay*.9);
     }else{
         balanceAmount.textContent = numberFormat.format(balance + pay);
