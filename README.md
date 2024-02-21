@@ -35,5 +35,5 @@ Alternatively, click on the link below to visit the webpage via github pages.
 https://noroffprojects.github.io/Frontend_Assignment1/ 
 
 ## Authors
-Name: Alexander Jonstrup
+Name: Alexander Jonstrup  
 E-Mail: Alexander.Jonstrup@outlook.com
