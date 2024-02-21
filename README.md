@@ -1,4 +1,4 @@
-## Assignment 3 - FilmAPI
+## Assignment 1 - Tech Shop
 
 ## Description 
 This project consists of single frontend web application, featuring a bank, work and webshop selling laptops, implemented by using HTML, CSS and JavaScript. The purpose of this project was to demenstroate the application described before without using any framework.
